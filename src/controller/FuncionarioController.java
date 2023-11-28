@@ -72,7 +72,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
 
     public Boolean update(Funcionario funcionario, int id){
         try{
-            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ? " +  "WHERE codigo_funcionario = ?;";
+            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "permissao_admin = ? " +  "WHERE codigo_funcionario = ?;";
 
             Connection connection = Conexao.getConexao();
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -83,7 +83,9 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
             statement.setString(4, funcionario.getSexo());
             statement.setString(5, funcionario.getEndereco());
             statement.setString(6, funcionario.getTelefone());
-            statement.setInt(7, id);
+            statement.setString(7, funcionario.getContaBancaria());
+            statement.setBoolean(8, funcionario.getPermissaoAdmin());
+            statement.setInt(9, id);
 
             int atualizados = statement.executeUpdate();
             return atualizados > 0;
