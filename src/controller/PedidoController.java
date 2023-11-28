@@ -25,7 +25,7 @@ public class PedidoController implements Controller<Boolean, Pedido>{
         }
     }
 
-    public ArrayList<Pedido> select(String tipo, String...valor){
+    public ArrayList<Pedido> select(String tipo, String valor){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         String sql;
 
@@ -33,7 +33,7 @@ public class PedidoController implements Controller<Boolean, Pedido>{
             if(tipo.equals("null")){
                 sql = "SELECT * FROM pedido";
             } else{
-                sql = "SELECT * FROM pedido WHERE " + tipo + " = " + valor[0] + ";";
+                sql = "SELECT * FROM pedido WHERE " + tipo + " = " + valor + ";";
             }
 
             Connection connection = Conexao.getConexao();

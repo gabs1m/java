@@ -33,7 +33,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
         }
     }
 
-    public ArrayList<Funcionario> select(String tipo, String...valor){
+    public ArrayList<Funcionario> select(String tipo, String valor){
         ArrayList<Funcionario> funcionarios = new ArrayList<>();
         String sql;
 
@@ -41,7 +41,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
             if(tipo.equals("null")){
                 sql = "SELECT * FROM funcionario";
             } else{
-                sql = "SELECT * FROM funcionario WHERE " + tipo + " = " + valor[0] + ";";
+                sql = "SELECT * FROM funcionario WHERE " + tipo + " = " + valor + ";";
             }
 
             Connection connection = Conexao.getConexao();
@@ -56,6 +56,8 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
                 funcionario.setSexo(result.getString("sexo"));
                 funcionario.setEndereco(result.getString("endereco"));
                 funcionario.setTelefone(result.getString("telefone"));
+                funcionario.setContaBancaria(result.getString("numero_conta"));
+                funcionario.setPermissaoAdmin(result.getBoolean("permissao_admin"));
                 funcionarios.add(funcionario);
             }
 
@@ -91,25 +93,9 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
         }
     }
 
-    public Boolean delete(int id){
-        try{
-            String sql = "DELETE FROM funcionario WHERE " + "codigo_funcionario = ?;";
-
-            Connection connection = Conexao.getConexao();
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            statement.setInt(1, id);
-            int deletados = statement.executeUpdate();
-            return deletados > 0;
-        } catch(SQLException e){
-            System.out.println("[ERRO]: " + e.getMessage());
-            return false;
-        }
-    }
-
     public Boolean insertGerente(Gerente gerente){
         try{
-            String sql = "INSERT INTO gerente SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "permissao_admin = ?, " + "senha_gerencial = ?;";
+            String sql = "INSERT INTO funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "permissao_admin = ?, " + "senha_gerencial = ?;";
 
             Connection connection = Conexao.getConexao();
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -132,15 +118,15 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
         }
     }
 
-    public ArrayList<Gerente> selectGerente(String tipo, String...valor){
+    public ArrayList<Gerente> selectGerente(String tipo, String valor){
         ArrayList<Gerente> gerentes = new ArrayList<>();
         String sql;
 
         try{
             if(tipo.equals("null")){
-                sql = "SELECT * FROM gerente";
+                sql = "SELECT * FROM funcionario";
             } else{
-                sql = "SELECT * FROM gerente WHERE " + tipo + " = " + valor[0] + ";";
+                sql = "SELECT * FROM funcionario WHERE " + tipo + " = " + valor + ";";
             }
 
             Connection connection = Conexao.getConexao();
@@ -155,6 +141,9 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
                 gerente.setSexo(result.getString("sexo"));
                 gerente.setEndereco(result.getString("endereco"));
                 gerente.setTelefone(result.getString("telefone"));
+                gerente.setContaBancaria(result.getString("numero_conta"));
+                gerente.setPermissaoAdmin(result.getBoolean("permissao_admin"));
+                gerente.setSenhaGerencial(result.getString("senha_gerencial"));
                 gerentes.add(gerente);
             }
 
@@ -165,5 +154,65 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
         }
 
         return gerentes;
+    }
+
+    public Boolean updateGerente(Gerente gerente, int id){
+        try{
+            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "permissao_admin = ?, " + "senha_gerencial = ? " +  "WHERE codigo_funcionario = ?;";
+
+            Connection connection = Conexao.getConexao();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, gerente.getNome());
+            statement.setString(2, gerente.getCpf());
+            statement.setInt(3, gerente.getIdade());
+            statement.setString(4, gerente.getSexo());
+            statement.setString(5, gerente.getEndereco());
+            statement.setString(6, gerente.getTelefone());
+            statement.setString(7, gerente.getContaBancaria());
+            statement.setBoolean(8, gerente.getPermissaoAdmin());
+            statement.setString(9, gerente.getSenhaGerencial());
+            statement.setInt(10, id);
+
+            int atualizados = statement.executeUpdate();
+            return atualizados > 0;
+        } catch(SQLException e){
+            System.out.println("[ERRO]: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Boolean delete(int id){
+        try{
+            String sql = "DELETE FROM funcionario WHERE " + "codigo_funcionario = ?;";
+
+            Connection connection = Conexao.getConexao();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, id);
+            int deletados = statement.executeUpdate();
+            return deletados > 0;
+        } catch(SQLException e){
+            System.out.println("[ERRO]: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Boolean promote(int id, String senha_gerencial){
+        try{
+            String sql = "UPDATE funcionario SET permissao_admin = true, " + "senha_gerencial = ? " + "WHERE codigo_funcionario = ?;";
+
+            Connection connection = Conexao.getConexao();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, senha_gerencial);
+            statement.setInt(2, id);
+
+            int atualizados = statement.executeUpdate();
+            return atualizados > 0;
+        } catch(SQLException e){
+            System.out.println("[ERRO]: " + e.getMessage());
+            return false;
+        }
     }
 }

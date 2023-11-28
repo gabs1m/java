@@ -25,7 +25,7 @@ public class MaterialController implements Controller<Boolean, Material>{
         }
     }
 
-    public ArrayList<Material> select(String tipo, String...valor){
+    public ArrayList<Material> select(String tipo, String valor){
         ArrayList<Material> materiais = new ArrayList<>();
         String sql;
 
@@ -33,7 +33,7 @@ public class MaterialController implements Controller<Boolean, Material>{
             if(tipo.equals("null")){
                 sql = "SELECT * FROM material";
             } else{
-                sql = "SELECT * FROM material WHERE " + tipo + " = " + valor[0] + ";";
+                sql = "SELECT * FROM material WHERE " + tipo + " = " + valor + ";";
             }
 
             Connection connection = Conexao.getConexao();
