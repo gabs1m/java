@@ -3,7 +3,7 @@ package model;
 public class Gerente extends Funcionario {
     private String senhaGerencial;
 
-    public Gerente(String nome, String cpf, String sexo, String endereco, String telefone, String contaBancaria, String codigoFuncionario, String senhaGerencial, int idade, boolean permissaoAdmin){
+    public Gerente(String nome, String cpf, String sexo, String endereco, String telefone, String contaBancaria, String codigoFuncionario, String senhaGerencial, int idade){
         this.setNome(nome);
         this.setCpf(cpf);
         this.setSexo(sexo);
@@ -13,9 +13,11 @@ public class Gerente extends Funcionario {
         this.setCodigoFuncionario(codigoFuncionario);
         this.setSenhaGerencial(senhaGerencial);
         this.setIdade(idade);
-        this.setPermissaoAdmin(permissaoAdmin);
+        this.setPermissaoAdmin(true);
     }
-    public Gerente(){}
+    public Gerente(){
+        this.setPermissaoAdmin(true);
+    }
 
     public void setSenhaGerencial(String senhaGerencial) {
         this.senhaGerencial = senhaGerencial;

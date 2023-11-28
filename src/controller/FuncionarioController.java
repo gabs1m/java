@@ -72,7 +72,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
 
     public Boolean update(Funcionario funcionario, int id){
         try{
-            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "permissao_admin = ? " +  "WHERE codigo_funcionario = ?;";
+            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ? " +  "WHERE codigo_funcionario = ?;";
 
             Connection connection = Conexao.getConexao();
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -84,8 +84,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
             statement.setString(5, funcionario.getEndereco());
             statement.setString(6, funcionario.getTelefone());
             statement.setString(7, funcionario.getContaBancaria());
-            statement.setBoolean(8, funcionario.getPermissaoAdmin());
-            statement.setInt(9, id);
+            statement.setInt(8, id);
 
             int atualizados = statement.executeUpdate();
             return atualizados > 0;
@@ -144,7 +143,6 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
                 gerente.setEndereco(result.getString("endereco"));
                 gerente.setTelefone(result.getString("telefone"));
                 gerente.setContaBancaria(result.getString("numero_conta"));
-                gerente.setPermissaoAdmin(result.getBoolean("permissao_admin"));
                 gerente.setSenhaGerencial(result.getString("senha_gerencial"));
                 gerentes.add(gerente);
             }
@@ -160,7 +158,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
 
     public Boolean updateGerente(Gerente gerente, int id){
         try{
-            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "permissao_admin = ?, " + "senha_gerencial = ? " +  "WHERE codigo_funcionario = ?;";
+            String sql = "UPDATE funcionario SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ?, " + "numero_conta = ?, " + "senha_gerencial = ? " +  "WHERE codigo_funcionario = ?;";
 
             Connection connection = Conexao.getConexao();
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -172,9 +170,8 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
             statement.setString(5, gerente.getEndereco());
             statement.setString(6, gerente.getTelefone());
             statement.setString(7, gerente.getContaBancaria());
-            statement.setBoolean(8, gerente.getPermissaoAdmin());
-            statement.setString(9, gerente.getSenhaGerencial());
-            statement.setInt(10, id);
+            statement.setString(8, gerente.getSenhaGerencial());
+            statement.setInt(9, id);
 
             int atualizados = statement.executeUpdate();
             return atualizados > 0;
@@ -209,6 +206,23 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
 
             statement.setString(1, senha_gerencial);
             statement.setInt(2, id);
+
+            int atualizados = statement.executeUpdate();
+            return atualizados > 0;
+        } catch(SQLException e){
+            System.out.println("[ERRO]: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Boolean demote(int id, String senha_gerencial){
+        try{
+            String sql = "UPDATE funcionario SET permissao_admin = false, senha_gerencial = '' " + "WHERE codigo_funcionario = ?;";
+
+            Connection connection = Conexao.getConexao();
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, id);
 
             int atualizados = statement.executeUpdate();
             return atualizados > 0;
