@@ -9,7 +9,7 @@ public class Material {
 
     private double valorUnitario;
     private int quantidade;
-    private int codigo;
+    private int codigoMaterial;
 
     public Material(String tipo, String descricao, String categoria, String lote, String dataFabricacao, double valorUnitario, int quantidade){
         this.setTipo(tipo);
@@ -37,10 +37,10 @@ public class Material {
     }
 
     public void setCodigo(int codigo) {
-        this.codigo = codigo;
+        this.codigoMaterial = codigo;
     }
     public int getCodigo() {
-        return codigo;
+        return codigoMaterial;
     }
 
     public void setCategoria(String categoria) {

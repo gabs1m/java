@@ -2,18 +2,17 @@ package model;
 
 public class Funcionario extends Pessoa{
     private String contaBancaria;
-    private String codigoFuncionario;
+    private int codigoFuncionario;
     private boolean permissaoAdmin = false;
     
-    public Funcionario(String nome, String cpf, String sexo, String endereco, String telefone, String contaBancaria, String codigoFuncionario, int idade){
+    public Funcionario(String nome, String cpf, int idade, String sexo, String endereco, String telefone, String contaBancaria){
         this.setNome(nome);
         this.setCpf(cpf);
+        this.setIdade(idade);
         this.setSexo(sexo);
         this.setEndereco(endereco);
         this.setTelefone(telefone);
         this.setContaBancaria(contaBancaria);
-        this.setCodigoFuncionario(codigoFuncionario);
-        this.setIdade(idade);
     }
     public Funcionario(){}
     
@@ -24,10 +23,10 @@ public class Funcionario extends Pessoa{
         return contaBancaria;
     }
 
-    public void setCodigoFuncionario(String codigoFuncionario) {
+    public void setCodigoFuncionario(int codigoFuncionario) {
         this.codigoFuncionario = codigoFuncionario;
     }
-    public String getCodigoFuncionario() {
+    public int getCodigoFuncionario() {
         return codigoFuncionario;
     }
 
