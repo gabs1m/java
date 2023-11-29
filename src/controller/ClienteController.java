@@ -3,7 +3,7 @@ package controller;
 import java.sql.*;
 import java.util.ArrayList;
 import database.Conexao;
-import model.Cliente;
+import model.*;
 
 public class ClienteController implements Controller<Boolean, Cliente>{
     public ClienteController(){}

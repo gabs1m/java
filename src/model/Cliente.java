@@ -1,7 +1,7 @@
 package model;
 
 public class Cliente extends Pessoa{
-    private String codigoCliente;
+    private int codigoCliente;
 
     public Cliente(String nome, String cpf, String sexo, String endereco, String telefone, int idade){
         this.setNome(nome);
@@ -13,10 +13,10 @@ public class Cliente extends Pessoa{
     }
     public Cliente(){}
 
-    public void setCodigoCliente(String codigo) {
+    public void setCodigoCliente(int codigo) {
         this.codigoCliente = codigo;
     }
-    public String getCodigoCliente() {
+    public int getCodigoCliente() {
         return codigoCliente;
     }
 

@@ -3,7 +3,7 @@ package controller;
 import java.sql.*;
 import java.util.ArrayList;
 import database.Conexao;
-import model.Material;
+import model.*;
 
 public class MaterialController implements Controller<Boolean, Material>{
     public MaterialController(){}

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Pedido {
     private int codigoPedido;
-    private String codigoCliente;
+    private int codigoCliente;
     private ArrayList<Material> materiais;
     private int[] quantidadeItens;
     private double valorPedido;
@@ -11,18 +11,12 @@ public class Pedido {
     private String dataEntrega;
     private int codigoRastreio;
 
-    public Pedido(String dataPedido, String dataEntrega, String codigoCliente, ArrayList<Material> materiais, int[] quantidadeItens){
+    public Pedido(String dataPedido, String dataEntrega, int codigoCliente, ArrayList<Material> materiais, int[] quantidadeItens){
         this.setDataPedido(dataPedido);
         this.setDataEntrega(dataEntrega);
         this.setCodigoCliente(codigoCliente);
         this.setMateriais(materiais);
         this.setQuantidadeItens(quantidadeItens);
-
-        double soma = 0;
-        for(int i = 0; i < materiais.size(); i++){
-            soma += materiais.get(i).getValorUnitario();
-        }
-        this.setValorPedido(soma);
     }
     public Pedido(){};
 
@@ -54,10 +48,10 @@ public class Pedido {
         return codigoRastreio;
     }
 
-    public void setCodigoCliente(String codigoCliente) {
+    public void setCodigoCliente(int codigoCliente) {
         this.codigoCliente = codigoCliente;
     }
-    public String getCodigoCliente() {
+    public int getCodigoCliente() {
         return codigoCliente;
     }
 
@@ -79,6 +73,14 @@ public class Pedido {
         this.valorPedido = valorPedido;
     }
     public double getValorPedido() {
+        this.somarValorPedido();
         return valorPedido;
+    }
+    public void somarValorPedido(){
+        double soma = 0;
+        for(int i = 0; i < this.getMateriais().size(); i++){
+            soma += this.getMateriais().get(i).getValorUnitario() * this.getQuantidadeItens()[i];
+        }
+        this.valorPedido = soma;
     }
 }

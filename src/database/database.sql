@@ -55,5 +55,7 @@ create table materiais_pedido(
     tipo_material varchar not null,
     quantidade_material int not null,
     valor_unitario_material float not null
-    primary key(codigo_material)
+    primary key(codigo_material),
+    foreign key(codigo_material) references material(codigo_material),
+    foreign key(codigo_pedido) references pedido(codigo_pedido)
 );

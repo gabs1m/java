@@ -3,8 +3,7 @@ package controller;
 import java.sql.*;
 import java.util.ArrayList;
 import database.Conexao;
-import model.Funcionario;
-import model.Gerente;
+import model.*;
 
 public class FuncionarioController implements Controller<Boolean, Funcionario>{
     public FuncionarioController(){}
