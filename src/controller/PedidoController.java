@@ -46,11 +46,12 @@ public class PedidoController implements Controller<Boolean, Pedido>{
 
             Pedido novoPedido = pedidos.get(0);
 
-            sql = "INSERT INTO materiais_pedido SET " + "codigo_pedido = ?, " + "codigo_material = ?, " + "tipo_material = ?, " + "quantidade_material = ?, " + "valor_unitario_material = ?;";
-            statement = connection.prepareStatement(sql);
-
             ArrayList<Material> materiais = novoPedido.getMateriais();
             for(int i = 0; i < materiais.size(); i++){
+                sql = "INSERT INTO materiais_pedido SET " + "codigo_pedido = ?, " + "codigo_material = ?, " + "tipo_material = ?, " + "quantidade_material = ?, " + "valor_unitario_material = ?;";
+                
+                statement = connection.prepareStatement(sql);
+
                 statement.setInt(1, novoPedido.getCodigoPedido());
                 statement.setInt(2, novoPedido.getMateriais().get(i).getCodigo());
                 statement.setString(3, novoPedido.getMateriais().get(i).getTipo());
@@ -74,6 +75,8 @@ public class PedidoController implements Controller<Boolean, Pedido>{
         try{
             if(tipo.equals("null")){
                 sql = "SELECT * FROM pedido";
+            } else if(tipo.equals("id")) {
+                sql = "SELECT * FROM pedido AS p INNER JOIN materiais_pedido as m ON p.codigo_pedido = m.codigo_pedido;";
             } else{
                 sql = "SELECT * FROM pedido WHERE " + tipo + " = " + valor + ";";
             }
@@ -84,7 +87,14 @@ public class PedidoController implements Controller<Boolean, Pedido>{
 
             while(result.next()){
                 Pedido pedido = new Pedido();
-                
+                pedido.setCodigoPedido(result.getInt("codigo_pedido"));
+                pedido.setCodigoRastreio(result.getInt("codigo_rastreio"));
+                pedido.setDataPedido(result.getString("data_pedido"));
+                pedido.setDataEntrega(result.getString("data_entrega"));
+                pedido.setValorPedido(result.getDouble("valor_pedido"));
+                pedido.setCodigoCliente(result.getInt("codigo_cliente"));
+                pedido.setMateriais(pedido.getMateriais());
+                pedido.setQuantidadeItens(pedido.getQuantidadeItens());
                 pedidos.add(pedido);
             }
 
@@ -99,16 +109,36 @@ public class PedidoController implements Controller<Boolean, Pedido>{
 
     public Boolean update(Pedido pedido, int id){
         try{
-            String sql = "UPDATE pedido SET " + "nome = ?, " + "cpf = ?, " + "idade = ?, " + "sexo = ?, " + "endereco = ?, " + "telefone = ? " +  "WHERE codigo_pedido = ?;";
+            String sql = "UPDATE pedido SET " + "data_pedido = ?, " + "data_entrega = ?, " + "valor = ?, " + "codigo_cliente = ? " + "WHERE codigo_pedido = ?;";
 
             Connection connection = Conexao.getConexao();
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            
-            statement.setInt(7, id);
+            statement.setString(1, pedido.getDataPedido());
+            statement.setString(2, pedido.getDataEntrega());
+            statement.setDouble(3, pedido.getValorPedido());
+            statement.setInt(4, pedido.getCodigoCliente());
+            statement.setInt(5, id);
 
-            int atualizados = statement.executeUpdate();
-            return atualizados > 0;
+            int[] atualizados = {2};
+            atualizados[0] = statement.executeUpdate();
+
+            ArrayList<Material> materiais = pedido.getMateriais();
+            for(int i = 0; i < materiais.size(); i++){
+                sql = "UPDATE materiais_pedido SET" + "codigo_material = ?, " + "tipo_material = ?, " + "quantidade_material = ?, " + "valor_unitario_material = ? " + "WHERE codigo_pedido = ?;";
+
+                statement = connection.prepareStatement(sql);
+
+                statement.setInt(1, materiais.get(i).getCodigo());
+                statement.setString(2, materiais.get(i).getTipo());
+                statement.setInt(3, materiais.get(i).getQuantidade());
+                statement.setDouble(4, materiais.get(i).getValorUnitario());
+                statement.setInt(5, id);
+
+                atualizados[1] = statement.executeUpdate();
+            }
+
+            return atualizados[0] > 0 && atualizados[1] > 0;
         } catch(SQLException e){
             System.out.println("[ERRO]: " + e.getMessage());
             return false;
@@ -123,8 +153,18 @@ public class PedidoController implements Controller<Boolean, Pedido>{
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setInt(1, id);
-            int deletados = statement.executeUpdate();
-            return deletados > 0;
+
+            int[] deletados = {2};
+            deletados[0] = statement.executeUpdate();
+
+            sql = "DELETE FROM materiais_pedido WHERE " + "codigo_pedido = ?;";
+            statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, id);
+
+            deletados[1] = statement.executeUpdate();
+
+            return deletados[0] > 0 && deletados[1] > 0;
         } catch(SQLException e){
             System.out.println("[ERRO]: " + e.getMessage());
             return false;

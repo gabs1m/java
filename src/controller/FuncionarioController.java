@@ -49,6 +49,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
 
             while(result.next()){
                 Funcionario funcionario = new Funcionario();
+                funcionario.setCodigoFuncionario(result.getInt("codigo_funcionario"));
                 funcionario.setNome(result.getString("nome"));
                 funcionario.setCpf(result.getString("cpf"));
                 funcionario.setIdade(result.getInt("idade"));
@@ -135,6 +136,7 @@ public class FuncionarioController implements Controller<Boolean, Funcionario>{
 
             while(result.next()){
                 Gerente gerente = new Gerente();
+                gerente.setCodigoFuncionario(result.getInt("codigo_funcionario"));
                 gerente.setNome(result.getString("nome"));
                 gerente.setCpf(result.getString("cpf"));
                 gerente.setIdade(result.getInt("idade"));

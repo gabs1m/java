@@ -47,6 +47,7 @@ public class ClienteController implements Controller<Boolean, Cliente>{
 
             while(result.next()){
                 Cliente cliente = new Cliente();
+                cliente.setCodigoCliente(result.getInt("codigo_cliente"));
                 cliente.setNome(result.getString("nome"));
                 cliente.setCpf(result.getString("cpf"));
                 cliente.setIdade(result.getInt("idade"));

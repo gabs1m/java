@@ -48,6 +48,7 @@ public class MaterialController implements Controller<Boolean, Material>{
 
             while(result.next()){
                 Material material = new Material();
+                material.setCodigo(result.getInt("codigo_material"));
                 material.setTipo(result.getString("tipo"));
                 material.setDescricao(result.getString("descricao"));
                 material.setLote(result.getString("lote"));
